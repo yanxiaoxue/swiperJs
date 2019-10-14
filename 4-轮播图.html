@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<style type="text/css">
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			a {
+				text-decoration: none;
+			}
+
+			.box {
+				position: relative;
+				width: 500px;
+				height: 300px;
+				border: 1px solid red;
+				margin: 0 auto;
+				/* overflow: hidden; */
+
+			}
+
+			.box .container {
+				position: relative;
+				/* left: 0; */
+				width: 1000%;
+			}
+			.box .container .swiper-item{
+				width: 10%;
+				height: 100%;
+				float: left;
+			}
+
+			.box .container img {
+				width: 100%;
+				height: 300px;
+			}
+
+			.left,
+			.right {
+				display: none;
+				position: absolute;
+				top: 0px;
+				bottom: 0px;
+				margin: auto;
+				width: 30px;
+				height: 30px;
+				background: rgba(0, 0, 0, 0.5);
+				color: #fff;
+				text-align: center;
+				line-height: 30px;
+				cursor: pointer;
+			}
+			.right {
+				right: 0px;
+			}
+
+			.box:hover .left {
+				display: block;
+			}
+
+			.box:hover .right {
+				display: block;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box" id="swiper-container">
+			<div class="container">
+				<div class="swiper-item">
+					<img src="img/1.jpg">
+				</div>
+				<div class="swiper-item">
+					<img src="img/20111220192632_ivsCT.thumb.700_0.jpg">
+				</div>
+				<div class="swiper-item">
+					<img src="img/20170511074938212.jpg">
+				</div>
+				<div class="swiper-item">
+					<img src="img/8a66880706ae42c9b5965294d9a3a9f5_1497358044990.jpg">
+				</div>
+				<div class="swiper-item">
+					<img src="img/a7691515_s.jpg">
+				</div>
+				<!-- 补图 -->
+				<div class="swiper-item">
+					<img src="img/1.jpg">
+				</div>
+				
+			</div>
+			<div class="left">
+				<
+			</div>
+			<div class="right">
+				>
+			</div>
+		</div>
+
+		<script src="js/tween.js" type="text/javascript" charset="utf-8"></script>
+
+		<script type="text/javascript">
+			var swiperContainer = document.getElementById("swiper-container");
+			var container = document.getElementsByClassName("container")[0];
+			var left = document.getElementsByClassName("left")[0];
+			var right = document.getElementsByClassName("right")[0];
+			
+			//记录图片的个数(不包含补图)
+			var length = container.getElementsByTagName("img").length - 1;
+			//轮播图最大容器宽度
+			var width = swiperContainer.clientWidth;
+			
+			
+			
+			//记录图片左移动
+			var pn = 0;
+			right.onclick = function() {
+				//总共5个图,代表第五个图出现
+				if(pn == length){
+					container.style.left = "0px";
+					//记录到了那一张图
+					pn = 0;
+				}
+				pn++;
+				configMove();
+			};
+			
+			left.onclick = function() {
+				if(pn == 0){
+					container.style.left = length*-width+"px";
+					//记录到了那一张图
+					//更新位置
+					pn = length;
+				}
+				pn--;
+				configMove();
+
+			};
+			
+			//动画前的配置
+			/*
+			t: current time（当前时间）；
+			b: beginning value（初始值）；
+			c: change in value（变化量）；
+			d: duration（持续时间）。
+			*/ 
+			function configMove(){
+				//让container动画
+				console.log(container.offsetLeft);
+				var t = 0,
+					b = container.offsetLeft,
+					c = -width*pn -b,//最终值-初始值
+					d = 200;
+				Tween.move(container, "left",t, b, c, d);
+			}
+		</script>
+	</body>
+</html>

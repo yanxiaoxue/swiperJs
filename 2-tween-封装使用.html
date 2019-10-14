@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			.box {
+				border: 1px solid #0000FF;
+				width: 800px;
+			}
+
+			#ball {
+				width: 100px;
+				height: 100px;
+				background: red;
+				border-radius: 50%;
+				position: relative;
+
+
+			}
+			#ball2 {
+				width: 100px;
+				height: 100px;
+				background: red;
+				border-radius: 50%;
+				position: relative;
+			
+			
+			}
+			
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<div id="ball">
+
+			</div>
+		</div>
+		<div class="box">
+			<div id="ball2">
+		
+			</div>
+		</div>
+		
+		<script src="js/tween.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var ball = document.getElementById("ball");
+			var ball2 = document.getElementById("ball2");
+			var t = 0, b = 1,c = -1,d = 500;
+			Tween.move(ball,'opacity',t,b,c,d);
+			
+			
+			//修改位置
+			var t3 = 0, b3 = 0,c3 = 500,d3 = 500;
+			Tween.move(ball2,'left',t3,b3,c3,d3,2,function(){
+				//当动画执行完后回调
+				// alert("动画执行完了");
+				//透明度
+				var t2 = 0, b2 = 1,c2 = -1,d2 = 500;
+				Tween.move(ball2,'opacity',t2,b2,c2,d2,10);
+			});
+			
+			//1.速度和回调方法要同时给!!!
+			//2.速度和回调可以都不给
+			//3.只给速度
+// 			function move(element,property,t,b,c,d,speed = 2,callback) {
+// 				//只能清除自己的id,不能影响其他元素
+// 				clearInterval(element.timeID);
+// 				//让每个小球都保存自己的计时器id
+// 				element.timeID = setInterval(function() {
+// 					t += speed;
+// 					// var value = Tween.Linear(t,b,c,d);
+// 					//除了Linear,都有easein easeOut easeInOut三个效果
+// 					var value = Tween.Bounce.easeInOut(t, b, c, d);
+// 					
+// 					//判断单位问题
+// 					var unit = property == "opacity"?"":"px";
+// 
+// 					element.style[property] = value + unit;
+// 					//动画结束
+// 					if (t >= d) {
+// 						clearInterval(element.timeID);
+// 						//回到终点:初始值+变化量
+// 						element.style[property] = c + b;
+// 						
+// 						//回调动画执行完的函数
+// 						if(callback){
+// 							callback();
+// 						}
+// 					}
+// 
+// 				}, 10)
+// 			}
+		</script>
+	</body>
+</html>

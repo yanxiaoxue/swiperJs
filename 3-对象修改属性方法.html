@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		
+		<script type="text/javascript">
+			
+			var person = {
+				name:"哈哈哈哈",
+				hobby:"吃饭"
+			};
+			//1.点语法访问属性
+			console.log(person.name);
+			
+			var attr = "hobby";
+			//点语法不识别变量
+			console.log(person.attr);
+			
+			//解决变量保存属性问题
+			
+			//2.访问对象下属性;对比数组记忆
+			console.log(person['name']);
+			console.log(person[attr]);
+			
+			
+			
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			.box {
+				border: 1px solid #0000FF;
+				width: 800px;
+			}
+		
+			#ball {
+				width: 100px;
+				height: 100px;
+				background: red;
+				border-radius: 50%;
+				position: relative;
+				
+		
+			}
+		</style>
+	</head>
+	<body>
+		<div class="box">
+			<div id="ball">
+		
+			</div>
+		</div>
+		
+		<!-- 先引入，然后使用 -->
+		<script src="js/tween.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var boxWidth = document.getElementsByClassName("box")[0].clientWidth;
+			var ball = document.getElementById("ball");
+			var ballWidth = ball.clientWidth;
+			var maxLeft = boxWidth - ballWidth;
+			console.log(maxLeft);
+
+
+			
+			/*
+			t: current time（当前时间）；
+            b: beginning value（初始值）；
+            c: change in value（变化量）；
+            d: duration（持续时间）。
+			*/ 
+		   
+			//为小球绑定点击事件
+			var timeID;
+			var t = 0,b = 0,c = maxLeft,d = 1000;
+			ball.onclick = function(){
+				console.log(Tween);
+				//使用方法:使用一个计数器递增t,当t和d相等的时候,代表动画完成
+				
+				clearInterval(timeID);
+				 timeID = setInterval(function(){
+					t+=3;
+					var value = Tween.Linear(t,b,c,d);
+					//除了Linear,都有easein easeOut easeInOut三个效果
+					// var value = Tween.Bounce.easeInOut(t,b,c,d);
+					
+					ball.style.left = value+"px";
+					if(t >= d){
+						clearInterval(timeID);
+						//回到终点:初始值+变化量
+						ball.style.left = c + b +"px";
+					}
+					
+				},10)
+			}
+		</script>
+	</body>
+</html>

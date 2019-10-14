@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="css/reset.css" />
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+
+		<style type="text/css">
+			#swiper-container {
+				border: 3px solid red;
+				width: 450px;
+				/* width: 100%; */
+				margin: 0 auto;
+				position: relative;
+				/* overflow: hidden; */
+			}
+
+			.swiper-wrapper {
+				/* width: calc(500px*2); */
+				/* width: 500%; */
+				overflow: hidden;
+				position: relative;
+				left: 0px;
+				background: blue;
+			}
+
+			.swiper-wrapper .swiper-item {
+				/* 和swiper-container宽度一致 */
+				width: 20%;
+				float: left;
+			}
+
+			.swiper-wrapper img {
+				width: 100%;
+				vertical-align: middle;
+			}
+
+			#swiper-button-left,
+			#swiper-button-right {
+				position: absolute;
+				width: 30px;
+				height: 30px;
+				background: rgba(0, 0, 0, 0.7);
+				color: #fff;
+				text-align: center;
+				line-height: 30px;
+
+				top: 0;
+				bottom: 0;
+				margin: auto;
+				cursor: pointer;
+
+				display: none;
+			}
+
+			#swiper-button-right {
+				right: 0;
+			}
+
+			#swiper-container:hover #swiper-button-left {
+				display: block;
+			}
+
+			#swiper-container:hover #swiper-button-right {
+				display: block;
+			}
+
+			.swiper-pagination {
+				position: absolute;
+				bottom: 10px;
+				width: 70px;
+				padding: 1px 2px;
+				background: rgba(225, 225, 225, .5);
+				left: 0;
+				right: 0;
+				margin: 0 auto;
+				border-radius: 10px;
+			}
+
+			.swiper-pagination ul {
+				display: flex;
+				justify-content: space-around;
+			}
+
+			.swiper-pagination li {
+				width: 12px;
+				height: 12px;
+				border-radius: 50%;
+				background: #fff;
+				cursor: pointer;
+			}
+
+			.swiper-pagination .pagination-selected {
+				background: orangered;
+				border: 2px solid #fff;
+			}
+		</style>
+	</head>
+	<body>
+
+		<div id="swiper-container">
+			<div class="swiper-wrapper">
+				<!-- 使用者只需要修改item里面的内容就可以了 -->
+				<div class="swiper-item">
+					<!-- <p>第一张图</p> -->
+					<img src="img/11.jpg">
+				</div>
+				<div class="swiper-item">
+					<img src="img/22.jpg">
+				</div>
+				<div class="swiper-item">
+					<img src="img/33">
+				</div>
+				<!-- 自己补一张图 -->
+				<div class="swiper-item">
+					<img src="img/11">
+				</div>
+				<!-- <img src="img/02.jpg">
+				<img src="img/03.jpg">
+				<img src="img/04.jpg"> -->
+				<!-- 无限滚动 -->
+				<!-- <img src="img/01.jpg"> -->
+				<!-- <img src="img/02.jpg"> -->
+			</div>
+
+			<div id="swiper-button-left">
+				< 
+			</div> 
+			<div id="swiper-button-right">
+					>
+			</div>
+			<!-- 分页器 -->
+			<div class="swiper-pagination">
+				<ul>
+					<li class="pagination-selected"></li>
+					<li></li>
+					<li></li>
+				</ul>
+			</div>
+
+		</div>
+
+
+		<script src="js/tween.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var swiperContainer = document.getElementById("swiper-container");
+			var container = document.getElementsByClassName("swiper-wrapper")[0];
+			var left = document.getElementById("swiper-button-left");
+			var right = document.getElementById("swiper-button-right");
+			var swiperItems = document.getElementsByClassName("swiper-item");
+			//分页器数组
+			var pagination = document.getElementsByClassName("swiper-pagination")[0].getElementsByTagName("li");
+			// 记录图片的个数(不包含补的图 - 1)
+			var length = swiperItems.length - 1;
+			//轮播图最大容器的宽度
+			var width = swiperContainer.clientWidth;
+			// 记录图片左移
+			var pn = 0;
+			//保存上一次点击的下标
+			var lastIndex = 0;
+			//防止变成局部变量
+			var autoPlayId;
+
+
+
+			//初始化轮播图宽度
+			function initSwiper() {
+				// container和图片张数保持一致
+				container.style.width = swiperContainer.clientWidth * (length + 1) + "px";
+				// 循环设置每个item的宽度和最大的swiperContainer宽度一致
+				for (var i = 0; i < swiperItems.length; i++) {
+					swiperItems[i].style.width = swiperContainer.clientWidth + "px";
+				}
+			}
+			initSwiper();
+
+
+
+            //右点击事件
+			right.onclick = function() {
+				// 总共四个图, 代表第四个图出去了
+				if (pn == length) {
+					container.style.left = "0px";
+					//记录到了哪一张图了
+					pn = 0;
+				}
+				pn++;
+				configMove();
+				//切换分页器
+				paginationSelected();
+
+			};
+
+
+
+            //左点击事件
+			left.onclick = function() {
+				//第一张
+				if (pn == 0) {
+					container.style.left = length * -width + "px";
+					// 更新位置
+					pn = length;
+				}
+				pn--;
+				configMove();
+				paginationSelected();
+
+			};
+
+
+
+			// 动画前的配置
+			function configMove() {
+				// 让container动画
+				//container.offsetLeft : 左偏移大小
+				console.log(container.offsetLeft);
+				var t = 0,
+					b = container.offsetLeft,
+					c = -width * pn - b, //最终值-初始值
+					d = 100;
+				Tween.move(container, "left", t, b, c, d, 5);
+			}
+
+
+
+			//切换分页器高亮状态
+			function paginationSelected() {
+				//id设置或修改方法
+				// pagination[1].id = "test"
+				//class通过className设置或修改方法
+				//上次点击的位置
+				pagination[lastIndex].className = "";
+				//最新的下标
+				var index = pn == 3 ? 0 : pn;
+				pagination[index].className = "pagination-selected";
+				//pn用完后,就变成上一次的下标
+				lastIndex = index;
+			}
+			
+			
+			
+			//为每个点绑定循环事件
+			for (var i = 0; i < pagination.length; i++) {
+				pagination[i].index = i;
+				pagination[i].onclick = function() {
+					//特殊情况:最后一张补图,要没有动画切换到第一张
+					if (pn == length) {
+						container.style.left = "0";
+					}
+					pn = this.index;
+					configMove();
+					//切换分页器
+					paginationSelected();
+				};
+			}
+
+			//自动播放
+			autoPlayId = setInterval(right.onclick, 3000);
+
+			//鼠标移入
+			swiperContainer.onmouseenter = function() {
+				clearInterval(autoPlayId);
+			}
+			
+			//鼠标离开
+			swiperContainer.onmouseleave = function() {
+				autoPlayId = setInterval(right.onclick, 3000);
+			}
+		</script>
+	</body>
+</html>
